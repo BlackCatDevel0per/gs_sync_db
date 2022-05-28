@@ -14,5 +14,6 @@ try:
 			shlex.split(f'{sys.executable} telegram_notifier.py'))
 		time.sleep(tg_notify_restart_timer)
 		os.killpg(os.getpgid(telegram_notifier_job.pid), signal.SIGTERM)
+		print("Telegram notifier restarted!")
 except KeyboardInterrupt:
 	os.killpg(os.getpgid(telegram_notifier_job.pid), signal.SIGTERM)
