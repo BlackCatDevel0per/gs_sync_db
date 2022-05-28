@@ -30,21 +30,16 @@ def get_orders_date():
 sched = BackgroundScheduler()
 
 # Add jobs to schedule for send notifications (with time shift from config)
-def add_jobs() -> list:
-	list_of_jobs = []
+def add_jobs():
 	for row in get_orders_date():
 		# Shift time
 		shifted_time = datetime.datetime.combine(row['delivery_time'], 
 			tg_notify_time_shift)
 		# Add job
-		job = sched.add_job(send_msg, 
+		sched.add_job(send_msg, 
 			'date', 
 			run_date=shifted_time, 
 			args=[f"""Срок поставки прошёл для: {row['order']}"""])
-		
-		list_of_jobs.append(job)
-		
-		return list_of_jobs
 		
 if __name__ == '__main__':
 	jobs = add_jobs()
@@ -54,7 +49,7 @@ if __name__ == '__main__':
 	# Reload jobs from db every n time from config
 	while True:
 		time.sleep(tg_notify_restart_timer)
-		print("Telegram notifier restarted!")
-		for job in jobs:
+		for job in sched.get_jobs():
 			job.remove()
 		jobs = add_jobs()
+		print("Telegram notifier restarted!")
