@@ -40,7 +40,9 @@ def add_jobs() -> list:
 			'date', 
 			run_date=shifted_time, 
 			args=[f"""Срок поставки прошёл для: {row['order']}"""])
-			list_of_jobs.append(job)
+		
+		list_of_jobs.append(job)
+		
 		return list_of_jobs
 		
 if __name__ == '__main__':
