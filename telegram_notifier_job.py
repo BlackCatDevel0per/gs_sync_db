@@ -12,7 +12,6 @@ try:
 		# Run telegram notifier job (restart every n time from config.ini)
 		telegram_notifier_job = subprocess.Popen(
 			shlex.split(f'{sys.executable} telegram_notifier.py'))
-		telegram_notifier_job.join()
 		time.sleep(tg_notify_restart_timer)
 		os.killpg(os.getpgid(telegram_notifier_job.pid), signal.SIGTERM)
 		print("Telegram notifier restarted!")
