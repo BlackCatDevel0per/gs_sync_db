@@ -14,7 +14,7 @@ def get_records(gc, sh) -> list:
 
 def md5_hash(data: str):
 	return md5(data.encode('utf-8')).hexdigest()
-# 123
+
 def update_rub_rate(records) -> list:
 	# get rub rate in usd
 	val_dict = get_rub_rate("USD")
