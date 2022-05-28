@@ -1,10 +1,9 @@
-import time
 import datetime
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.blocking import BlockingScheduler
 
 import requests
 
-from sheet_parser.config import token, chat_ids, time_shift
+from sheet_parser.config import token, chat_ids, tg_notify_time_shift
 
 from sheet_parser.app import google_sheets, conn
 
@@ -25,13 +24,13 @@ def get_orders_date():
 	result = conn.execute(q).fetchall()
 	return result
 	
-sched = BackgroundScheduler()
+sched = BlockingScheduler()
 
 # Add jobs to schedule for send notifications (with time shift from config)
 for row in get_orders_date():
 	# Shift time
 	shifted_time = datetime.datetime.combine(row['delivery_time'], 
-		datetime.datetime.strptime(time_shift, "%H:%M:%S").time())
+		tg_notify_time_shift)
 	# Add job
 	sched.add_job(send_msg, 
 		'date', 
@@ -40,9 +39,4 @@ for row in get_orders_date():
 
 # Start schedule
 sched.start()
-
-while True:
-	time.sleep(5)
-	sched.stop()
-	sched.start()
 

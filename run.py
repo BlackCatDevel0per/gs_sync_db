@@ -9,7 +9,7 @@ try:
 		shlex.split(f'{sys.executable} sheet_parser.py'))
 	# Run telegram notifier
 	telegram_notifier = subprocess.Popen(
-		shlex.split(f'{sys.executable} telegram_notifier.py'))
+		shlex.split(f'{sys.executable} telegram_notifier_job.py'))
 	# Changing directory for run django site
 	os.chdir(os.path.join(os.getcwd(), 'info_site'))
 	django_site = subprocess.Popen(
