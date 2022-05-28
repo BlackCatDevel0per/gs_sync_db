@@ -5,6 +5,7 @@ from hashlib import md5
 
 from .rate_broker import get_rub_rate
 
+# sheet.py
 def get_records(gc, sh) -> list:
 	wks = sh.sheet1
 	recs = wks.get_all_records()
@@ -13,7 +14,7 @@ def get_records(gc, sh) -> list:
 
 def md5_hash(data: str):
 	return md5(data.encode('utf-8')).hexdigest()
-# 123
+
 def update_rub_rate(records) -> list:
 	# get rub rate in usd
 	val_dict = get_rub_rate("USD")
@@ -43,7 +44,7 @@ def create_table(engine) -> None:
 	google_sheets = get_table(metadata)
 	metadata.create_all(engine)
 
-def update_keys(records: list) -> dict:
+def update_keys(records: list) -> list:
 	new_records = []
 	for row in records:
 		data = list(row.values())
