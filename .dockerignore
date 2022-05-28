@@ -1,0 +1,7 @@
+__pycache__
+*.pyc
+.git/
+venv/
+tmp/
+data.txt
+data.xml

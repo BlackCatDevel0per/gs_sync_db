@@ -1,0 +1,48 @@
+{% load static %}
+{% block content %}
+  <a href="{% url 'usd' %}">USD</a>
+  <a href="{% url 'rub' %}">RUB</a>
+  <div id="container" style="width: 75%;">
+    <canvas id="line-chart"></canvas>
+  </div>
+
+  <script src="{% static 'plot/Chart.min.js' %}"></script>
+  <script>
+
+    const prices = {{ prices|safe }};
+    const dates = {{ dates|safe }};
+
+    function count() {
+    let sum = 0;
+    for (i = 0; i < prices.length; i++) {
+    sum += prices[i];
+    }
+    return sum;
+    }
+
+    const prices_sum = count();
+
+    var config = {
+      type: 'line',
+      data: {
+        datasets: [{
+          data: prices,
+          borderColor: 'rgb(75, 192, 192)',
+          label: prices_sum,
+          tension: 0.1
+        }],
+        labels: dates
+      },
+      options: {
+        responsive: true
+      }
+    };
+
+    window.onload = function() {
+      var ctx = document.getElementById('line-chart').getContext('2d');
+      window.myChart = new Chart(ctx, config);
+    };
+
+  </script>
+
+{% endblock %}

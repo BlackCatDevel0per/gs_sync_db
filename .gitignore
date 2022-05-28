@@ -1,0 +1,10 @@
+__pycache__
+*.pyc
+venv/
+tmp/
+client_secret.json
+sheets.googleapis.com-python.json
+test.py
+config.txt
+data.txt
+data.xml
