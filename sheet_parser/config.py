@@ -12,7 +12,7 @@ token = _config["TELEGRAM"]["token"]
 chat_ids = ' '.join(_config["TELEGRAM"]["chat_ids"].split(",")).split()
 
 alchemy_engine = _config["SQL"]["alchemy_engine"]
-print(_config["OPTIONS"]["timer"])
+
 _timer = datetime.datetime.strptime(_config["OPTIONS"]["timer"], '%H:%M:%S').time()
 # time in seconds
 timer = _timer.hour*60**2 + _timer.minute*60 + _timer.second
