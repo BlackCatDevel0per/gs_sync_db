@@ -18,8 +18,9 @@ chat_ids = -1234567890098, 1234567890
 alchemy_engine = postgresql+psycopg2://admin:passwd@localhost/db_name
 
 [OPTIONS]
-timer = 5
-time_shift = 09:00:00
+timer = 01:00:00
+tg_notify_restart_timer = 01:00:00
+tg_notify_time_shift = 01:00:00
 ```
 
 to get client_secret.json and sheets.googleapis.com-python.json file create google api token (read pygsheets docs)
