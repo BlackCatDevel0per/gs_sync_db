@@ -1,5 +1,6 @@
+import time
 import datetime
-from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 
 import requests
 
@@ -24,7 +25,7 @@ def get_orders_date():
 	result = conn.execute(q).fetchall()
 	return result
 	
-sched = BlockingScheduler()
+sched = BackgroundScheduler()
 
 # Add jobs to schedule for send notifications (with time shift from config)
 for row in get_orders_date():
@@ -39,4 +40,7 @@ for row in get_orders_date():
 
 # Start schedule
 sched.start()
+
+while True:
+	tume.sleep(5)
 
