@@ -1,11 +1,13 @@
 import datetime
-from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 
 import requests
 
 from sheet_parser.config import token, chat_ids, tg_notify_time_shift
 
 from sheet_parser.app import google_sheets, conn
+
+from sheet_parser.config import tg_notify_restart_timer
 
 # Send nessage to telegram
 def send_msg(text):
@@ -24,19 +26,32 @@ def get_orders_date():
 	result = conn.execute(q).fetchall()
 	return result
 	
-sched = BlockingScheduler()
+sched = BackgroundScheduler()
 
+# Shift time
+shifted_time = datetime.datetime.combine(row['delivery_time'], 
+	tg_notify_time_shift)
 # Add jobs to schedule for send notifications (with time shift from config)
-for row in get_orders_date():
-	# Shift time
-	shifted_time = datetime.datetime.combine(row['delivery_time'], 
-		tg_notify_time_shift)
-	# Add job
-	sched.add_job(send_msg, 
-		'date', 
-		run_date=shifted_time, 
-		args=[f"""Срок поставки прошёл для: {row['order']}"""])
-
-# Start schedule
-sched.start()
-
+def add_jobs() -> list:
+	list_of_jobs = []
+	for row in get_orders_date():
+		# Add job
+		job = sched.add_job(send_msg, 
+			'date', 
+			run_date=shifted_time, 
+			args=[f"""Срок поставки прошёл для: {row['order']}"""])
+			list_of_jobs.append(job)
+		return list_of_jobs
+		
+if __name__ == '__main__':
+	jobs = add_jobs()
+	# Start schedule
+	sched.start()
+	
+	# Reload jobs from db every n time from config
+	while True:
+		time.sleep(tg_notify_restart_timer)
+		print("Telegram notifier restarted!")
+		for job in jobs:
+			job.remove()
+		jobs = add_jobs()
