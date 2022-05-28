@@ -42,6 +42,7 @@ for row in get_orders_date():
 sched.start()
 
 while True:
-	print(5)
 	time.sleep(5)
+	sched.stop()
+	sched.start()
 
