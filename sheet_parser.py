@@ -24,26 +24,12 @@ if __name__ == '__main__':
 		old_db_data = conn.execute(google_sheets.select().with_only_columns(google_sheets.c.id)).fetchall()
 		old_db_data = {i[0] for i in old_db_data}
 		if len(records) < len(old_db_data):
-			rows_ids_to_delete = [i for i in old_db_data if i not in {nr['id'] for nr in records}]
+			rows_ids_to_delete = [i for i in old_db_data if i not in {list(nr.values())[0] for nr in records}]
 			q = google_sheets.delete().where(google_sheets.c.id.in_(rows_ids_to_delete))
 			conn.execute(q)
-		# upset data to db
+		# upsert data to db
 		conn.execute(upsert(google_sheets, records))
-		"""
-		row = records[1]
-		ins = google_sheets.insert().values(
-			id = row[0],
-			order = row[1],
-			price_usd = row[2],
-			delivery_time = datetime.strptime(row[3], "%d.%m.%Y").date(),
-			price_rub = 300
-			)
-		"""
-		# ins = google_sheets.insert()
-		# upd = google_sheets.update()
-		# print(ins.compile().params)
-		# print(data)
-		# print(len(data))
+
 	except Exception as e:
 		print("Startup Error!", "\n", e)
 	while True:
@@ -56,7 +42,7 @@ if __name__ == '__main__':
 				old_rate = current_rate
 				# Check if removed rows
 				if len(records) < len(old_records):
-					rows_ids_to_delete = [r['id'] for r in old_records if r['id'] not in {nr['id'] for nr in records}]
+					rows_ids_to_delete = [list(r.values())[0] for r in old_records if list(r.values())[0] not in {list(nr.values())[0]] for nr in records}]
 					q = google_sheets.delete().where(google_sheets.c.id.in_(rows_ids_to_delete))
 					conn.execute(q)
 					
