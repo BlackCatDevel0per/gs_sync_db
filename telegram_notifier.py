@@ -28,13 +28,13 @@ def get_orders_date():
 	
 sched = BackgroundScheduler()
 
-# Shift time
-shifted_time = datetime.datetime.combine(row['delivery_time'], 
-	tg_notify_time_shift)
 # Add jobs to schedule for send notifications (with time shift from config)
 def add_jobs() -> list:
 	list_of_jobs = []
 	for row in get_orders_date():
+		# Shift time
+		shifted_time = datetime.datetime.combine(row['delivery_time'], 
+			tg_notify_time_shift)
 		# Add job
 		job = sched.add_job(send_msg, 
 			'date', 
