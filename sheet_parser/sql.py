@@ -43,7 +43,7 @@ def create_table(engine) -> None:
 	google_sheets = get_table(metadata)
 	metadata.create_all(engine)
 
-def update_keys(records: list) -> dict:
+def update_keys(records: list) -> list:
 	new_records = []
 	for row in records:
 		data = list(row.values())

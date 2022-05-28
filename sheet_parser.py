@@ -23,10 +23,10 @@ if __name__ == '__main__':
 		records = update_rub_rate(records)
 		# Check if removed rows in gsheets
 		old_db_data = conn.execute(google_sheets.select().with_only_columns(google_sheets.c.id)).fetchall()
-		old_db_data = [i[0] for i in old_db_data]
+		old_db_data = {i[0] for i in old_db_data}
 		if len(records) < len(old_db_data):
-			rows_ids_to_delete = [i for i in old_db_data if i not in [list(nr.values())[0] for nr in records]]
-			q = google_sheets.delete().where(google_sheets.c.id.in_(tuple(rows_ids_to_delete)))
+			rows_ids_to_delete = {i for i in old_db_data if i not in {nr['id'] for nr in records}}
+			q = google_sheets.delete().where(google_sheets.c.id.in_(rows_ids_to_delete))
 			conn.execute(q)
 		# upset data to db
 		conn.execute(upsert(google_sheets, records))
@@ -57,8 +57,8 @@ if __name__ == '__main__':
 				old_rate = current_rate
 				# Check if removed rows
 				if len(records) < len(old_records):
-					rows_ids_to_delete = [list(r.values())[0] for r in old_records if list(r.values())[0] not in [list(nr.values())[0] for nr in records]]
-					q = google_sheets.delete().where(google_sheets.c.id.in_(tuple(rows_ids_to_delete)))
+					rows_ids_to_delete = {r['id'] for r in old_records if r['id'] not in {nr['id'] for nr in records}}
+					q = google_sheets.delete().where(google_sheets.c.id.in_(rows_ids_to_delete))
 					conn.execute(q)
 					
 				# update old gsheets data
