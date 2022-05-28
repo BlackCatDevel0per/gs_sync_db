@@ -42,7 +42,7 @@ if __name__ == '__main__':
 				old_rate = current_rate
 				# Check if removed rows
 				if len(records) < len(old_records):
-					rows_ids_to_delete = [list(r.values())[0] for r in old_records if list(r.values())[0] not in {list(nr.values())[0]] for nr in records}]
+					rows_ids_to_delete = [list(r.values())[0] for r in old_records if list(r.values())[0] not in {list(nr.values())[0] for nr in records}]
 					q = google_sheets.delete().where(google_sheets.c.id.in_(rows_ids_to_delete))
 					conn.execute(q)
 					
