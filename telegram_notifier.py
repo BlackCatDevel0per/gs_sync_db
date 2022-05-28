@@ -28,12 +28,15 @@ sched = BlockingScheduler()
 
 # Add jobs to schedule for send notifications (with time shift from config)
 for row in get_orders_date():
+	# Shift time
 	shifted_time = datetime.datetime.combine(row['delivery_time'], 
 		datetime.datetime.strptime(time_shift, "%H:%M:%S").time())
+	# Add job
 	sched.add_job(send_msg, 
 		'date', 
 		run_date=shifted_time, 
 		args=[f"""Срок поставки прошёл для: {row['order']}"""])
 
+# Start schedule
 sched.start()
 
