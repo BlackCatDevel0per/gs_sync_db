@@ -8,13 +8,6 @@ if __name__ == '__main__':
 		records = get_records(gc, sh)
 		old_records = records.copy()
 		old_rate = get_rub_rate("USD")['Value']
-		# records = update_keys(records)
-		# records = update_rub_rate(records)
-		# print(records)
-	
-		# print(records[0])
-		# print(records[1])
-		# print(records[2])
 		
 		create_table(engine) # create table if not exists
 		# convert gsheets for db
