@@ -10,11 +10,16 @@ client_secret_file = client_secret.json
 
 gs_file = test_sheet
 
+[TELEGRAM]
+token = 1234567890:abcdefghijklmnopqrstuvwxyz---------
+chat_ids = -1234567890098, 1234567890
+
 [SQL]
 alchemy_engine = postgresql+psycopg2://admin:passwd@localhost/db_name
 
 [OPTIONS]
 timer = 5
+time_shift = 09:00:00
 ```
 
 to get client_secret.json and sheets.googleapis.com-python.json file create google api token (read pygsheets docs)
